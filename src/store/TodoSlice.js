@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { markComplete } from "../services/service";
 
 const TodoSlice = createSlice({
     name : 'todo',
@@ -7,25 +8,21 @@ const TodoSlice = createSlice({
     },
     reducers:{
 
-        delete(state,action){
-
+        reset(state,action){
+            state.todoList = []
         },
-
-        completed(state,action){
-
-        },
-
-        
 
         select(state,action){
-            console.log(action,state)
-           state.todoList.push(action.payload)
+            state.todoList.push(action.payload)
         },
 
         unselect(state,action){
-            console.log(action,state)
-            const id = action.payload
-            state.todoList =  state.todoList.filter(item => id !== item)
+
+            const todo = action.payload
+            state.todoList =  state.todoList.filter(item =>{
+                 
+                return todo._id !== item._id
+            } )
         }
 
 

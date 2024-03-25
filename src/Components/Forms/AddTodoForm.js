@@ -8,9 +8,11 @@ import 'react-calendar/dist/Calendar.css';
 import 'react-clock/dist/Clock.css';
 import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
-import { updateTask } from '../../services/service';
+import { addTask } from '../../services/service';
 
-const EditTodoForm = ({todo,setOpenModal,refetch}) => {
+import TimePicker from 'react-time-picker';
+
+const AddTodoFrom = ({setOpenModal,refetch}) => {
 
     const [value, onChange] = useState(new Date());
 
@@ -25,30 +27,30 @@ const EditTodoForm = ({todo,setOpenModal,refetch}) => {
       
       mutationFn:(payload)=> {
 
-        const {id,update} = payload
+        const {update} = payload
        
-        return updateTask(id,update)
+        return addTask(update)
       },
-      onSuccess:(res)=>refetch()
+      onSuccess:(res)=>{
+        refetch()
+        console.log(setOpenModal)
+        setOpenModal(false)
+      }
     })
 
     const formik = useFormik({
       initialValues: {
-        title: todo?.title,
-        description: todo?.description,
+        title: '',
+        description: '',
         status: 'pending',
-        due : todo?.due
+        due : ''
       },
       onSubmit: (values) => {
 
         const payload = {
-          id:todo?._id,
           update:values
         }
          mutate(payload)
-
-
-         setOpenModal(false)
       },
     });
 
@@ -77,15 +79,19 @@ const EditTodoForm = ({todo,setOpenModal,refetch}) => {
         <Label htmlFor="work">work</Label>
       </div> */}
 
-      <div>
+      <div className='w-2/4'>
       <DateTimePicker 
+      className='w-full'
       onChange={handleDateChange} 
-      value={formik?.values?.due} 
-      amPmAriaLabel="Select AM/PM" 
-      clockIcon="Clock"
-      className=''
-      autoFocus
-        />
+      value={formik?.values?.due}
+      minutePlaceholder='mm'
+      yearPlaceholder='yyyy'
+      monthPlaceholder='mm'
+      hourPlaceholder='hh'
+      dayPlaceholder='dd'
+      
+
+      />
       </div>
       
       <div className='flex gap-x-3 w-full'>
@@ -102,4 +108,4 @@ const EditTodoForm = ({todo,setOpenModal,refetch}) => {
   )
 }
 
-export default EditTodoForm
+export default AddTodoFrom
