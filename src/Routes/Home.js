@@ -18,7 +18,7 @@ const Home = () => {
 
   const [task, setTask] = useState([])
   
-  const { data: allTask, refetch } = useQuery({
+  const { data: allTask, refetch,isLoading } = useQuery({
     queryKey: ['tasks',credential],
     queryFn: () => getTasks(credential),
     onSuccess: (res) => {
@@ -83,7 +83,7 @@ const Home = () => {
     <>
       <NavBar />
       <SideBar />
-      <AllTasks task={task} refetch={refetch} />
+      <AllTasks task={task} refetch={refetch} isLoading={isLoading}/>
     </>
   )
 }
