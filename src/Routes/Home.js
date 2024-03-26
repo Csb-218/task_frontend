@@ -9,8 +9,10 @@ import { useCookies } from 'react-cookie';
 
 const Home = () => {
 
-  const [cookies] = useCookies('credential');
-  const {credential} = cookies
+  // const [cookies] = useCookies(['credential']);
+  // const {credential} = cookies
+
+  const credential = useSelector(state => state.auth.credential)
   const sideActive = useSelector(state => state.sidebar.active)
   const searchTerm = useSelector(state => state.search.search)
 

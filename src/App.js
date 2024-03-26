@@ -16,7 +16,7 @@ import { withCookies,useCookies } from 'react-cookie';
 
 function App() {
 
-  const [cookies] = useCookies('credential');
+  const [cookies] = useCookies(['credential']);
   const dispatch = useDispatch()
 
   const queryClient = new QueryClient()
@@ -69,14 +69,14 @@ function requestPermission() {
 
       console.log(cookies.credential)
 
-      const decoded = jwtDecode(cookies?.credential)
+      const decoded = cookies?.credential && jwtDecode(cookies?.credential)
       const {email,name,picture} = decoded
 
       const user = {
         name :name,
         email:email,
         picture:picture,
-        credential:cookies
+        credential:cookies.credential
       }
 
       dispatch(AuthActions.login(user))

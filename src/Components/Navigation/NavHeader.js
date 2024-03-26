@@ -1,5 +1,5 @@
 
-'use client';
+
 import { useState } from 'react'
 import { Avatar, Dropdown, Navbar } from 'flowbite-react';
 import { todoIcon } from '../../Assets/Images';
@@ -7,12 +7,14 @@ import SearchBox from '../Forms/SearchBox';
 import { SideActions } from '../../store/SideBarSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import SearchBoxMobile from '../Forms/SearchBoxMobile';
-
+import { googleLogout } from '@react-oauth/google';
+import { AuthActions } from '../../store/AuthSlice';
+import { useCookies } from 'react-cookie';
 
 function NavBar() {
 
-
-
+ 
+  const [cookies,removeCookie,setCookie] = useCookies(['credential']);
   const [openMenu, setOpen] = useState(false)
 
   const dispatch = useDispatch()
@@ -23,6 +25,12 @@ function NavBar() {
   const email = useSelector(state => state.auth.email)
 
   const sideActive = useSelector(state => state.sidebar.active)
+
+  const handleSignOut = () =>{
+    googleLogout()
+    dispatch(AuthActions.logout())
+    setCookie('credential',null)
+  }
 
   return (
 
@@ -55,7 +63,10 @@ function NavBar() {
             </Dropdown.Header>
             
             <Dropdown.Divider />
-            {/* <Dropdown.Item>Sign out</Dropdown.Item> */}
+            <Dropdown.Item onClick={()=>{
+              handleSignOut()
+              
+            }}>Sign out</Dropdown.Item>
           </Dropdown>
 
           <button data-collapse-toggle="navbar-search" onClick={() => setOpen(!openMenu)} type="button" className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-search" aria-expanded="false">

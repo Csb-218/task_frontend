@@ -12,14 +12,11 @@ import { useCookies } from 'react-cookie';
 
 export const LoginForm = () => {
 
-
-
   const navigate = useNavigate()
-
   const dispatch = useDispatch()
   const credential = useSelector(state => state.auth.credential)
 
-  const [cookies, setCookie] = useCookies('credential');
+  const [cookies, setCookie] = useCookies(['credential']);
 
   const formik = useFormik({
     initialValues: {
@@ -107,6 +104,7 @@ export const LoginForm = () => {
                     credential:credential
                   }
                   console.log(user)
+                  
                   dispatch(AuthActions.login(user))
 
                   console.log(credentialResponse);

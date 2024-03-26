@@ -8,7 +8,8 @@ import { HiCheck ,HiTrash } from 'react-icons/hi';
 import { useSelector , useDispatch } from 'react-redux';
 import { TodoActions } from '../store/TodoSlice'
 import { useMutation } from 'react-query';
-
+import { useCookies } from 'react-cookie'
+import EmptyTask from '../Components/placeholders/EmptyTask'
 
 const AllTasks = ({ task, refetch }) => {
   
@@ -16,7 +17,9 @@ const AllTasks = ({ task, refetch }) => {
     const dispatch = useDispatch()
     const selectedList = useSelector(state => state.todo.todoList)
     const credential = useSelector(state => state.auth.credential)
-    console.log(credential)
+    // console.log(credential)
+    // const [cookies] = useCookies(['credential']);
+    // const {credential} = cookies
     const isAllPending = selectedList?.every(task => task?.status === 'pending')
 
     const{isLoading:isCompleteLoading,mutate:complete} = useMutation({
@@ -44,7 +47,7 @@ const AllTasks = ({ task, refetch }) => {
     return (
         <>
             <main >
-                <div className="p-4 sm:ml-64 ">
+                <div className="p-4 sm:ml-64   ">
 
                     <div className=' flex flex-row-reverse gap-2'>
                         <Button pill color='failure' className=' w-[2.7rem]' onClick={_delete} disabled={isDeleteLoading} isProcessing={isDeleteLoading} >
@@ -57,10 +60,13 @@ const AllTasks = ({ task, refetch }) => {
                         </Button>
                     </div>
 
-                    <div className="p-4 border-gray-200  grid lg:grid-cols-3 gap-5  grid-cols-1 rounded-lg dark:border-gray-700 mt-8">
+                    <div className="p-4 border-gray-200  relative grid lg:grid-cols-3 gap-5  grid-cols-1 rounded-lg dark:border-gray-700 mt-8">
 
                         {
+                            task?.length > 0 ?
                             task?.map((todo, index) => <TodoCard key={index} todo={todo} refetch={refetch} />)
+                            :
+                           <EmptyTask/>
                         }
 
                     </div>
