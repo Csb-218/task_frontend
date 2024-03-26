@@ -29,8 +29,8 @@ function NavBar() {
     <nav className="bg-teal-500 border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-2xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="https://flowbite.com/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src={todoIcon} className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Task</span>
+          <img src={todoIcon} className="mr-1 h-6 sm:h-9" alt="Flowbite React Logo" />
+          <span className="self-center whitespace-nowrap text-xl font-semibold text-white">Task</span>
 
         </a>
         <div className="flex md:order-2 gap-x-1">
