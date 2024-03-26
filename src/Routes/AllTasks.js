@@ -15,11 +15,13 @@ const AllTasks = ({ task, refetch }) => {
 
     const dispatch = useDispatch()
     const selectedList = useSelector(state => state.todo.todoList)
+    const credential = useSelector(state => state.auth.credential)
+    console.log(credential)
     const isAllPending = selectedList?.every(task => task?.status === 'pending')
 
     const{isLoading:isCompleteLoading,mutate:complete} = useMutation({
         mutationFn:()=>{
-            return (selectedList?.length >= 1 ? markComplete(selectedList) : null)
+            return (selectedList?.length >= 1 ? markComplete(selectedList,credential) : null)
         },
         onSuccess:(res)=>{
             console.log(res)
@@ -30,7 +32,7 @@ const AllTasks = ({ task, refetch }) => {
 
     const{isLoading:isDeleteLoading,mutate:_delete} = useMutation({
         mutationFn:()=>{
-            return (selectedList?.length >= 1 ? deleteTasks(selectedList) : null)
+            return (selectedList?.length >= 1 ? deleteTasks(selectedList,credential) : null)
         },
         onSuccess:(res)=>{
             console.log(res)

@@ -3,23 +3,27 @@ import { SideBar, NavBar } from '../Components/Navigation'
 import { useQuery } from 'react-query'
 import { getTasks } from '../services/service'
 import AllTasks from './AllTasks'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useCookies } from 'react-cookie';
 
 
 const Home = () => {
 
+  const [cookies] = useCookies('credential');
+  const {credential} = cookies
   const sideActive = useSelector(state => state.sidebar.active)
   const searchTerm = useSelector(state => state.search.search)
 
   const [task, setTask] = useState([])
-
+  
   const { data: allTask, refetch } = useQuery({
-    queryKey: ['tasks'],
-    queryFn: () => getTasks(),
+    queryKey: ['tasks',credential],
+    queryFn: () => getTasks(credential),
     onSuccess: (res) => {
-
+      console.log(res)
       setTask(res?.data)
     },
+    enabled:!!credential,
     onError: (err) => console.error(err),
     refetchIntervalInBackground: false,
     refetchOnMount: false,
@@ -69,14 +73,11 @@ const Home = () => {
       setTask(searchedItem)
     }
 
-
-
   }, [sideActive, allTask, searchTerm])
 
 
 
   return (
-
     <>
       <NavBar />
       <SideBar />

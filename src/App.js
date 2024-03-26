@@ -5,32 +5,26 @@ import { Login, SignUp } from './Routes/Authentication';
 import Home from './Routes/Home';
 import { getMessaging, getToken } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { sendTokenToServer } from './services/service';
+import { useDispatch } from 'react-redux';
+import { firebaseConfig } from './utils/Helpers';
+import { jwtDecode } from "jwt-decode";
+import { AuthActions } from './store/AuthSlice';
+import AuthWrapper from './Components/AuthWrapper';
+import { withCookies,useCookies } from 'react-cookie';
 
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAxNERRZMkaumLO9wauUwkKpFjaz3i5EQo",
-  authDomain: "tasker-c0002.firebaseapp.com",
-  projectId: "tasker-c0002",
-  storageBucket: "tasker-c0002.appspot.com",
-  messagingSenderId: "184138483121",
-  appId: "1:184138483121:web:9aea18505bd957c3f32990",
-  measurementId: "G-3HWZ653PZ9"
-};
 
 function App() {
 
-  const queryClient = new QueryClient()
+  const [cookies] = useCookies('credential');
+  const dispatch = useDispatch()
 
+  const queryClient = new QueryClient()
+ 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
 
   const messaging = getMessaging(app);
-
  
-  
-
 function requestPermission() {
     console.log('Requesting permission...');
 
@@ -67,6 +61,28 @@ function requestPermission() {
     })
   }
 
+  useEffect(()=>{
+
+    console.log(cookies)
+
+    if(cookies?.credential){
+
+      console.log(cookies.credential)
+
+      const decoded = jwtDecode(cookies?.credential)
+      const {email,name,picture} = decoded
+
+      const user = {
+        name :name,
+        email:email,
+        picture:picture,
+        credential:cookies
+      }
+
+      dispatch(AuthActions.login(user))
+    }
+
+  },[cookies,dispatch])
   
 
 
@@ -74,9 +90,8 @@ function requestPermission() {
 
     const permission = Notification.permission
 
-    
-
     if(permission !== 'granted'){
+     
       requestPermission()
     }
 
@@ -93,10 +108,11 @@ function requestPermission() {
           <Route 
             path='/' 
             element={
-             <Home/>
+             <AuthWrapper>
+              <Home/>
+             </AuthWrapper>
             }
           >
-            
             
           </Route>
           <Route path='login' element={<Login />} />
@@ -104,10 +120,9 @@ function requestPermission() {
 
         </Routes>
 
-
       </QueryClientProvider>
     </>
   );
 }
 
-export default App;
+export default withCookies(App);

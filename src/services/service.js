@@ -1,8 +1,6 @@
 import axios from "axios"
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiY3NiIiwiZW1haWwiOiJjc2JoYWd3YW50QGdtYWlsLmNvbSIsImlhdCI6MTcxMDkzOTIzNn0.Gcmyplx5VWxjwjeWECPXJ-EJDTv995TbP92JseJBhFI'
-
-export async function getTasks(){
+export async function getTasks(credential){
     console.log(process.env.REACT_APP_SERVER_BASE_URL)
 
     const options = {
@@ -10,7 +8,7 @@ export async function getTasks(){
         baseURL:`${process.env.REACT_APP_SERVER_BASE_URL}`,
         url:'/task',
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${credential}`
          }
     }
 
@@ -18,7 +16,7 @@ export async function getTasks(){
     return res
 }
 
-export async function updateTask(id,update){
+export async function updateTask(id,update,credential){
 
     const options = {
         method:'PATCH',
@@ -26,7 +24,7 @@ export async function updateTask(id,update){
         url:`/task/update/${id}`,
         data:update,
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${credential}`
          }
     }
 
@@ -34,7 +32,7 @@ export async function updateTask(id,update){
     return res
 }
 
-export async function markComplete(idList){
+export async function markComplete(idList,credential){
 
     const options = {
         method:'PATCH',
@@ -42,7 +40,7 @@ export async function markComplete(idList){
         url:`/task/complete`,
         data:idList,
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${credential}`
          }
     }
 
@@ -50,7 +48,7 @@ export async function markComplete(idList){
     return res
 }
 
-export async function deleteTasks(idList){
+export async function deleteTasks(idList,credential){
 
     const options = {
         method:'DELETE',
@@ -58,7 +56,7 @@ export async function deleteTasks(idList){
         url:`/task/remove`,
         data:idList,
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${credential}`
          }
     }
 
@@ -66,7 +64,7 @@ export async function deleteTasks(idList){
     return res
 }
 
-export async function addTask(task){
+export async function addTask(task,credential){
 
     const options = {
         method:'POST',
@@ -74,7 +72,7 @@ export async function addTask(task){
         url:`/task/add`,
         data:task,
         headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${credential}`
          }
     }
 
@@ -82,10 +80,7 @@ export async function addTask(task){
     return res
 }
 
-
-
-
-export async function sendTokenToServer(deviceToken){
+export async function sendTokenToServer(deviceToken,credential){
 
     const options = {
       method:'POST',
@@ -95,10 +90,10 @@ export async function sendTokenToServer(deviceToken){
         token:deviceToken
       },
       headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${credential}`
        }
     }
 
       const response = await axios.request(options)
       return response
-  }
+}

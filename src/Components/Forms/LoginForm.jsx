@@ -1,9 +1,25 @@
-import React from 'react';
+import {useEffect} from 'react';
 import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import Cover from '../../Assets/Images/Cover.jpg'
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import { useDispatch,useSelector } from 'react-redux';
+import { AuthActions } from '../../store/AuthSlice';
+import { useNavigate} from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
 
 export const LoginForm = () => {
+
+
+
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+  const credential = useSelector(state => state.auth.credential)
+
+  const [cookies, setCookie] = useCookies('credential');
 
   const formik = useFormik({
     initialValues: {
@@ -15,12 +31,22 @@ export const LoginForm = () => {
     },
   });
 
+
+  useEffect(()=>{
+    console.log(credential)
+    if(credential){
+      setCookie('credential',credential)
+      navigate('/',{replace : true})
+    }
+
+  },[credential,navigate,setCookie])
+
   return (
 
     <div className="flex flex-wrap w-full">
       <div className="flex flex-col w-full md:w-1/2">
         <div className="flex justify-center pt-12 md:justify-start md:pl-12 md:-mb-24">
-          <a href="#" className="p-4 text-xl font-bold text-white bg-black">
+          <a href="/#" className="p-4 text-xl font-bold text-white bg-black">
             Design.
           </a>
         </div>
@@ -55,17 +81,46 @@ export const LoginForm = () => {
                     </path>
                   </svg>
                 </span>
-                <input 
-                id="password"
-                name="password"
-                type="password"
-                onChange={formik.handleChange}
-                value={formik.values.password} 
-                className=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent" 
-                placeholder="Password" 
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                  className=" flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                  placeholder="Password"
                 />
               </div>
             </div>
+
+            <div className='my-2'>
+            <GoogleOAuthProvider clientId="370852537833-lghova8etquoqpba6veoafhi49qvujr9.apps.googleusercontent.com">
+              <GoogleLogin
+                onSuccess={credentialResponse => {
+                  const {email,name,picture} = jwtDecode(credentialResponse?.credential)
+                  const {credential} = credentialResponse
+
+                  const user = {
+                    name :name,
+                    email:email,
+                    picture:picture,
+                    credential:credential
+                  }
+                  console.log(user)
+                  dispatch(AuthActions.login(user))
+
+                  console.log(credentialResponse);
+                }}
+                onError={() => {
+                  console.log('Login Failed')
+                }}
+              />
+
+            </GoogleOAuthProvider>
+            </div>
+
+            
+
             <button type="submit" className="w-full px-4 py-2 text-base font-semibold text-center text-white transition duration-200 ease-in bg-black shadow-md hover:text-black hover:bg-white focus:outline-none focus:ring-2">
               <span className="w-full">
                 Submit
@@ -75,7 +130,7 @@ export const LoginForm = () => {
           <div className="pt-12 pb-12 text-center">
             <p>
               Don&#x27;t have an account?
-              
+
               <Link to='/signup' className="font-semibold underline">
                 Register here.
               </Link>

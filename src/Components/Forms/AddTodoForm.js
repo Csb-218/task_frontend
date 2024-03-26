@@ -9,13 +9,11 @@ import 'react-clock/dist/Clock.css';
 import { useFormik } from 'formik';
 import { useMutation } from 'react-query';
 import { addTask } from '../../services/service';
-
-import TimePicker from 'react-time-picker';
+import {  useSelector } from 'react-redux';
 
 const AddTodoFrom = ({setOpenModal,refetch}) => {
 
-    const [value, onChange] = useState(new Date());
-
+    const credential = useSelector(state => state.auth.credential)
 
     const handleDateChange = (e) => {
       const date = new Date(e)
@@ -28,8 +26,8 @@ const AddTodoFrom = ({setOpenModal,refetch}) => {
       mutationFn:(payload)=> {
 
         const {update} = payload
-       
-        return addTask(update)
+        console.log(update,credential)
+        return addTask(update,credential)
       },
       onSuccess:(res)=>{
         refetch()
