@@ -81,11 +81,11 @@ export async function addTask(task,credential){
 }
 
 export async function sendTokenToServer(deviceToken,credential){
-
+    console.log(deviceToken)
     const options = {
       method:'POST',
       baseURL:`${process.env.REACT_APP_SERVER_BASE_URL}`,
-      url:'/token',
+      url:`/token`,
       data:{
         token:deviceToken
       },
@@ -95,5 +95,6 @@ export async function sendTokenToServer(deviceToken,credential){
     }
 
       const response = await axios.request(options)
+      console.log(response)
       return response
 }
