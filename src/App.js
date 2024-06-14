@@ -26,21 +26,23 @@ function App() {
   const messaging = getMessaging(app);
  
 function requestPermission() {
+
     console.log('Requesting permission...');
 
     Notification.requestPermission()
     .then((permission) => {
+
       if (permission === 'granted') {
 
         console.log('Notification permission granted.');
-        console.log(`${process.env.REACT_APP_VAPID_KEY}`)
+        // console.log(`${process.env.REACT_APP_VAPID_KEY}`)
 
         getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY }).then((currentToken) => {
 
-          if (currentToken) {
+          if (currentToken) { 
             // Send the token to your server and update the UI if necessary
             console.log(currentToken)
-            sendTokenToServer(currentToken)
+            sendTokenToServer(currentToken,cookies?.credential)
             .then(res => console.log('token successfully sent to server',res))
             .catch(err => console.error(err))
 
@@ -71,6 +73,8 @@ function requestPermission() {
 
       const decoded = cookies?.credential && jwtDecode(cookies?.credential)
       const {email,name,picture} = decoded
+
+      // console.log(email,name)
 
       const user = {
         name :name,
