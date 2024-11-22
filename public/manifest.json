@@ -1,25 +1,15 @@
 {
-  "short_name": "Task Manager",
-  "name": "manages daily tasks like a pro",
-  "icons": [
-    {
-      "src": "to-do-list.svg",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "to-do-list.svg",
-      "type": "image/svg",
-      "sizes": "192x192"
-    },
-    {
-      "src": "to-do-list.svg",
-      "type": "image/svg",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "name": " Task",
+  "version":"1.0.0",
+  "description":"A task wallet",
+  "manifest_version":3,
+  "action":{
+    "default_popup":"index.html",
+    "default_title":"Task wallet"
+  },
+
+  "permissions" : [
+    "storage"
+  ]
+ 
 }

@@ -5,7 +5,7 @@ import { getTasks } from '../services/service'
 import AllTasks from './AllTasks'
 import { useSelector } from 'react-redux';
 import { useCookies } from 'react-cookie';
-
+import { server_down } from '../Assets/icons'
 
 const Home = () => {
 
@@ -18,7 +18,7 @@ const Home = () => {
 
   const [task, setTask] = useState([])
   
-  const { data: allTask, refetch,isLoading } = useQuery({
+  const { data: allTask, refetch,isLoading ,isError } = useQuery({
     queryKey: ['tasks',credential],
     queryFn: () => getTasks(credential),
     onSuccess: (res) => {
@@ -80,11 +80,14 @@ const Home = () => {
 
 
   return (
-    <>
+    <div className='relative'>
       <NavBar />
       <SideBar />
-      <AllTasks task={task} refetch={refetch} isLoading={isLoading}/>
-    </>
+      
+        <AllTasks task={task} refetch={refetch} isLoading={isLoading}/>
+      
+      
+    </div>
   )
 }
 
