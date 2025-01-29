@@ -91,7 +91,7 @@ export const LoginForm = () => {
             </div> */}
 
             <div className='my-2  flex flex-row justify-center '>
-            <GoogleOAuthProvider clientId="370852537833-lghova8etquoqpba6veoafhi49qvujr9.apps.googleusercontent.com">
+            <GoogleOAuthProvider clientId={`${process.env.REACT_APP_GOOGLE_CLIENT_ID}`}>
               <GoogleLogin
                 onSuccess={credentialResponse => {
                   const {email,name,picture} = jwtDecode(credentialResponse?.credential)
