@@ -65,11 +65,7 @@ function requestPermission() {
 
   useEffect(()=>{
 
-    console.log(cookies)
-
     if(cookies?.credential){
-
-      console.log(cookies.credential)
 
       const decoded = cookies?.credential && jwtDecode(cookies?.credential)
       const {email,name,picture} = decoded

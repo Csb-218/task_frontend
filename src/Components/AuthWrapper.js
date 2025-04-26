@@ -7,7 +7,6 @@ const AuthWrapper = ({children}) => {
     const [cookies] = useCookies(['credential']);
     const {credential} = cookies
 
-    console.log(credential)
 
     return(
         credential ?
